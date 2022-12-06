@@ -6,9 +6,11 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
+@Table(name = "course_info")
 public class CourseInfo {
 
     @Id
