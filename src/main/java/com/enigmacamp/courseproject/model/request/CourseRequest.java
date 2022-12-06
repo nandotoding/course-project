@@ -17,7 +17,7 @@ public class CourseRequest {
     @NotNull(message = "Course file is required")
     private CourseFileRequest courseFileRequest;
 
-    @NotNull(message = "{invalid.coursetype.required")
+    @NotNull(message = "Course type is required")
     private CourseTypeRequest courseType;
 
     @NotNull(message = "Course info is required")

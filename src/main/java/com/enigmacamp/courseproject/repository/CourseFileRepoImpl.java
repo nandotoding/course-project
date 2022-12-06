@@ -3,6 +3,7 @@ package com.enigmacamp.courseproject.repository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Repository
 public class CourseFileRepoImpl implements CourseFileRepo {
 
     private final Path root;
@@ -41,5 +43,10 @@ public class CourseFileRepoImpl implements CourseFileRepo {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error " + e.getMessage());
         }
+    }
+
+    @Override
+    public Path getPath(String filename) {
+        return root.resolve(filename);
     }
 }

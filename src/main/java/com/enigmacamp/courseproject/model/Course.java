@@ -1,8 +1,9 @@
 package com.enigmacamp.courseproject.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -27,7 +28,7 @@ public class Course {
     @JoinColumn(name = "course_info_id", referencedColumnName = "id")
     private CourseInfo courseInfo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_type_id", referencedColumnName = "id")
     private CourseType courseType;
 

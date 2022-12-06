@@ -19,7 +19,6 @@ public class CourseFile {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 
-    @URL
-    private String file;
+    private String fileLink;
 
 }
