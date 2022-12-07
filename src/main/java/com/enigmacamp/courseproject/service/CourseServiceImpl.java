@@ -5,13 +5,22 @@ import com.enigmacamp.courseproject.model.CourseFile;
 import com.enigmacamp.courseproject.model.CourseInfo;
 import com.enigmacamp.courseproject.model.CourseType;
 import com.enigmacamp.courseproject.model.request.CourseFileRequest;
+import com.enigmacamp.courseproject.model.response.PagingResponse;
 import com.enigmacamp.courseproject.repository.CourseFileRepo;
 import com.enigmacamp.courseproject.repository.CourseInfoRepo;
 import com.enigmacamp.courseproject.repository.CourseRepo;
 import com.enigmacamp.courseproject.repository.CourseTypeRepo;
+import com.enigmacamp.courseproject.repository.specification.CourseSpecification;
+import com.enigmacamp.courseproject.util.SearchCriteria;
+import com.enigmacamp.courseproject.util.SearchOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -58,6 +67,35 @@ public class CourseServiceImpl implements CourseService {
         courseRepo.save(course);
 
         return course;
+    }
+
+    @Override
+    public PagingResponse<Course> getAllPaging(Pageable pageable) {
+        Page<Course> courses = courseRepo.findAllPaging(pageable);
+        return new PagingResponse<>("Success",courses);
+    }
+
+    @Override
+    public Page<Course> getAll(Pageable pageable) {
+        return courseRepo.findAll(pageable);
+    }
+
+    @Override
+    public Page<Course> getAll(List<SearchCriteria> searchCriteria, Pageable pageable) {
+        Specification<Course> courseSpecification = Specification.where(new CourseSpecification(searchCriteria.get(0)));
+
+        for (int i = 1; i < searchCriteria.size(); i++) {
+            SearchCriteria searchCriterion = searchCriteria.get(i);
+            CourseSpecification newSpecs = new CourseSpecification(searchCriterion);
+
+            if (searchCriterion.getSearchOperation() == SearchOperation.AND) {
+                courseSpecification = Specification.where(courseSpecification).and(newSpecs);
+            } else {
+                courseSpecification = Specification.where(courseSpecification).or(newSpecs);
+            }
+        }
+
+        return courseRepo.findAll(courseSpecification, pageable);
     }
 
 }
